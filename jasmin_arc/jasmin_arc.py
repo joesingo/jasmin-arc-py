@@ -1,13 +1,33 @@
+import json
+
 from .status import JOB_STATUSES
+from .config import ConnectionConfig
+from .exceptions import InvalidConfigError
 
 
 class ArcInterface(object):
     """
-    Class to handle interactions with ARC-CE server
+    Class to handle interactions with the ARC-CE server
     """
 
-    def __init__(self, config_path):
-        print("Initialising api object using config at '{}'".format(config_path))
+    def __init__(self, config_path=None):
+        """
+        Create an object to interface with the ARC server.
+
+        :param config_path: Path to config JSON file, or None to use the default settings
+        :raises InvalidConfigError: if config is not valid JSON or is otherwise invalid
+        """
+        try:
+            # Let errors reading file bubble to calling code
+            with open(config_path) as config_file:
+                config_dict = json.load(config_file)
+
+            self.config = ConnectionConfig.create_config(config_dict)
+            ConnectionConfig.validate(self.config)
+
+        # Catch JSON parsing errors
+        except ValueError as e:
+            raise InvalidConfigError(e.message)
 
     def submit_job(self, *args, **kwargs):
         """
@@ -37,6 +57,6 @@ class ArcInterface(object):
             print("Saving output file to '{}'".format(output_path))
 
         if errors_path:
-            print("Saving output file to '{}'".format(errors_path))
+            print("Saving errors file to '{}'".format(errors_path))
 
 
