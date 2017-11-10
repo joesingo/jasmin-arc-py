@@ -18,9 +18,12 @@ class ArcInterface(object):
         :raises InvalidConfigError: if config is not valid JSON or is otherwise invalid
         """
         try:
-            # Let errors reading file bubble to calling code
-            with open(config_path) as config_file:
-                config_dict = json.load(config_file)
+            config_dict = None
+
+            if config_path:
+                # Let errors reading file bubble to calling code
+                with open(config_path) as config_file:
+                    config_dict = json.load(config_file)
 
             self.config = ConnectionConfig.create_config(config_dict)
             ConnectionConfig.validate(self.config)
