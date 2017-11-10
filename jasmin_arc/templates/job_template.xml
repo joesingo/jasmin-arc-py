@@ -1,0 +1,20 @@
+<JobDefinition
+ xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+ xmlns:posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix">
+ <JobDescription>
+   <JobIdentification>
+     <JobName>{{ name }}</JobName>
+   </JobIdentification>
+   <Application>
+     <posix:POSIXApplication>
+       <posix:Executable>{{ executable }}</posix:Executable>
+       {% for arg in arguments %}
+           <posix:Argument>{{ arg }}</posix:Argument>
+       {% endfor %}
+       <posix:Output>{{ output_filename }}</posix:Output>
+       <posix:Error>{{ errors_filename }}</posix:Error>
+     </posix:POSIXApplication>
+   </Application>
+   </JobDescription>
+</JobDefinition>
+

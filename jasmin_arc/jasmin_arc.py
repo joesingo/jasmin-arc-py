@@ -1,8 +1,14 @@
 import json
 
+from jinja2 import Environment, PackageLoader, select_autoescape
+
 from .status import JOB_STATUSES
 from .config import ConnectionConfig
 from .exceptions import InvalidConfigError
+
+
+# Location of directory containing templates for JSDL XML
+TEMPLATES_DIR = "templates"
 
 
 class ArcInterface(object):
@@ -32,11 +38,25 @@ class ArcInterface(object):
         except ValueError as e:
             raise InvalidConfigError(e.message)
 
-    def submit_job(self, *args, **kwargs):
+        # Create jinja2 environment for loading JSDL template(s)
+        self.env = Environment(loader=PackageLoader(__name__, TEMPLATES_DIR),
+                               autoescape=select_autoescape(["xml"]))
+
+    def submit_job(self, executable, *args):
         """
         Submit a job and return the job ID
         """
         job_id = 1
+
+        template = self.env.get_template("job_template.xml")
+        jsdl = template.render({
+            "name": "ARC job",  # TODO: Use sensible name or omit
+            "executable": executable,
+            "arguments": args
+        })
+        print("JSDL for job is:")
+        print(jsdl)
+
         print("Started job {}".format(job_id))
         return job_id
 
