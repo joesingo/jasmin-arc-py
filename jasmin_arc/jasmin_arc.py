@@ -20,7 +20,7 @@ class ArcInterface(object):
         """
         Create an object to interface with the ARC server.
 
-        :param config_path: Path to config JSON file, or None to use the default settings
+        :param config_path: Path to config JSON file, or ``None`` to use the default settings
         :raises InvalidConfigError: if config is not valid JSON or is otherwise invalid
         """
         try:
