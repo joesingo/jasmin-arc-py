@@ -1,4 +1,4 @@
-from .exceptions import InvalidConfigError
+from exceptions import InvalidConfigError
 
 
 class ConnectionConfig(object):

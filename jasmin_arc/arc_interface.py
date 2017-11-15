@@ -1,11 +1,12 @@
 import json
+import subprocess
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 import arc
 
-from .status import JOB_STATUSES
-from .config import ConnectionConfig
-from .exceptions import InvalidConfigError
+from status import JOB_STATUSES
+from config import ConnectionConfig
+from exceptions import InvalidConfigError
 
 
 # Location of directory containing templates for JSDL XML
