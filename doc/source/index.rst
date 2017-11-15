@@ -39,8 +39,27 @@ Alternatively, to install straight from GitHub:
 
    pip install git+https://github.com/cedadev/jasmin-arc-py
 
-``jasmin_arc`` also requires the ARC client Python library to installed; follow the instructions
-relevant to your OS `here <#>`_. (**TODO**: find some instructions!)
+``jasmin_arc`` also requires the ARC client Python library to installed. On CentOS 6:
+
+.. code-block:: bash
+
+   # Remove the epel cache if any:
+   rm -rf /var/cache/yum/x86_64/6/epel
+   rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+   rpm -Uvh  http://download.nordugrid.org/packages/nordugrid-release/releases/15.03/centos/el6/x86_64/nordugrid-release-15.03-1.el6.noarch.rpm
+   yum update
+   yum install  nordugrid-arc-client-tools
+   # Check installation:
+   arcinfo --version
+
+On Ubuntu:
+
+.. code-block:: bash
+
+   wget -q http://download.nordugrid.org/DEB-GPG-KEY-nordugrid.asc -O- | sudo apt-key add -
+   apt-get update
+   apt-get install nordugrid-arc-python
+   apt-get install globus-gsi-cert-utils-progs
 
 If working in a virtual enviroment you may also need to add the location of the ARC installation to
 your ``PYTHONPATH``:
