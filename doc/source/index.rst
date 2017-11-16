@@ -103,7 +103,7 @@ The required options are:
 ``ArcInterface`` class
 ----------------------
 
-.. automodule:: jasmin_arc.jasmin_arc
+.. automodule:: jasmin_arc.arc_interface
     :members:
     :undoc-members:
     :noindex:
