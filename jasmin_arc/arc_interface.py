@@ -28,7 +28,7 @@ class ArcInterface(object):
 
         :param config_path: Path to config JSON file, or ``None`` to use the default settings
         :param log:         File-like object to write log messages to, or ``None`` to disable
-                            logging. Use ``sys.stdin`` or ``sys.stdout`` to print messages
+                            logging. Use ``sys.stdout`` or ``sys.stderr`` to print messages
         :param log_level:   The level of detail logs should show (default: :attr:`.LogLevels.INFO`).
                             See :class:`.LogLevels` for the available levels
 
