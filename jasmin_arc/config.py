@@ -29,7 +29,7 @@ class ConnectionConfig(object):
         Update the default config with values from the given dictionary
 
         :param config: Dictionary to get overriden settings from, or ``None`` to use default settings
-        :return: Dictionary containing config settings
+        :return:       Dictionary containing config settings
         """
         c = dict(cls.DEFAULT_CONFIG)
         if config:

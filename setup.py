@@ -11,6 +11,7 @@ if __name__ == "__main__":
         version="0.1",
         install_requires=[
             "Jinja2",
+            "enum34"
         ],
         license="BSD",
     )

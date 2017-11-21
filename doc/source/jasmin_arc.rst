@@ -12,6 +12,14 @@ jasmin\_arc\.arc\_iface module
     :undoc-members:
     :show-inheritance:
 
+jasmin\_arc\.arc\_interface module
+----------------------------------
+
+.. automodule:: jasmin_arc.arc_interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 jasmin\_arc\.arclib module
 --------------------------
 
@@ -28,18 +36,18 @@ jasmin\_arc\.config module
     :undoc-members:
     :show-inheritance:
 
-jasmin\_arc\.exceptions module
-------------------------------
+jasmin\_arc\.constants module
+-----------------------------
 
-.. automodule:: jasmin_arc.exceptions
+.. automodule:: jasmin_arc.constants
     :members:
     :undoc-members:
     :show-inheritance:
 
-jasmin\_arc\.jasmin\_arc module
--------------------------------
+jasmin\_arc\.exceptions module
+------------------------------
 
-.. automodule:: jasmin_arc.jasmin_arc
+.. automodule:: jasmin_arc.exceptions
     :members:
     :undoc-members:
     :show-inheritance:
