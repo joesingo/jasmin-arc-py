@@ -7,8 +7,7 @@ import subprocess
 from jinja2 import Environment, PackageLoader, select_autoescape
 import arc
 
-from constants import LogLevels
-from status import JOB_STATUSES
+from constants import JobStatuses, LogLevels
 from config import ConnectionConfig
 from exceptions import (InvalidConfigError, ProxyGenerationError, InvalidJobDescription,
                         JobSubmissionError, NoTargetsAvailableError)
@@ -147,7 +146,7 @@ class ArcInterface(object):
         """
         Return the status of the given job
         """
-        return JOB_STATUSES.COMPLETED
+        return JobStatuses.COMPLETED
 
     def cancel_job(self, job_id):
         """

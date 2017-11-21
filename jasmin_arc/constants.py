@@ -3,6 +3,17 @@ from enum import Enum
 import arc
 
 
+class JobStatuses(Enum):
+    """
+    Possible values for job status
+    """
+    COMPLETED = 'completed'
+    IN_PROGRESS = 'in progress'
+    NOT_STARTED = 'not started'
+    NOT_SUBMITTED = 'not submitted'
+    FAILED = 'failed'
+
+
 class LogLevels(Enum):
     """
     Log levels for specifying the level of details to include in the logs. These levels and

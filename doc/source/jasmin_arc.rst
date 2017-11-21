@@ -52,14 +52,6 @@ jasmin\_arc\.exceptions module
     :undoc-members:
     :show-inheritance:
 
-jasmin\_arc\.status module
---------------------------
-
-.. automodule:: jasmin_arc.status
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------
