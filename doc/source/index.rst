@@ -81,17 +81,19 @@ Configuration
 ``jasmin_arc`` uses a JSON file to configure the connection to the ARC CE server.
 The required options are:
 
-* ``pem_file``: **Description here** (default: ``~/.arc/userkey-nopass.pem``)
+* ``pem_file``: Path to the private key file associated with your grid certificate
+  (default: ``~/.arc/userkey-nopass.pem``)
 
-* ``client_cert_file``: **Description here** (default: ``~/.arc/usercert.pem``)
+* ``client_cert_file``: Path to grid certificate file (default: ``~/.arc/usercert.pem``)
 
 * ``browser_cert_file``: **Description here** (default: ``~/certBundle.p12``)
 
 * ``certs_dir``: **Description here** (default: ``/etc/grid-security/certificates``)
 
-* ``arc_proxy_cmd``: **Description here** (default: ``/usr/bin/arcproxy``)
+* ``arcproxy_path``: Path to the ``arcproxy`` binary, which is used to generate a proxy certificate
+  from the private key and certificate (default: ``/usr/bin/arcproxy``)
 
-* ``myproxy_file``: **Description here** (default: ``/tmp/x509up_u502``)
+* ``proxy_file``: Path to save the generated proxy certificate to (default: ``/tmp/x509up_u502``)
 
 * ``arc_server``: URL to the ARC server (default: ``jasmin-ce.ceda.ac.uk:60000/arex``)
 
