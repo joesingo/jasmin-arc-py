@@ -94,5 +94,15 @@ Code is documented inline using `Sphinx`_. To generate the documentation as HTML
    cd doc
    make html
 
-This will create HTML files in ``build/html``
+This will create HTML files in ``build/html``.
+
+When creating, renaming or deleting source files, use ``sphinx-apidoc`` to generate the module index pages:
+
+.. code-block:: bash
+
+   cd doc/source
+   rm jasmin_arc.rst modules.rst  # Delete existing index pages
+   sphinx-apidoc -o . ../../jasmin_arc
+
+Remember to commit these files in git afterwards.
 
