@@ -17,7 +17,7 @@ class ConnectionConfig(object):
         "browser_cert_file": "~/certBundle.p12",
         "certs_dir": "/etc/grid-security/certificates",
         "arcproxy_path": "/usr/bin/arcproxy",
-        "proxy_file": "/tmp/x509up_u502",
+        "proxy_file": "/tmp/arcproxy_file",
         "arc_server": "jasmin-ce.ceda.ac.uk:60000/arex",
         "outputs_filename": "outputs.zip",
         "errors_filename": "errors_file.txt"

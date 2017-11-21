@@ -74,9 +74,20 @@ class ArcInterface(object):
         except OSError as ex:
             raise OSError("Failed to run arcproxy command: {}".format(ex))
 
-        user_config = arc.UserConfig()
-        user_config.ProxyPath(self.config["proxy_file"])
-        user_config.CACertificatesDirectory(self.config["certs_dir"])
+        # Write arc client config to temp file - arc python library seems buggy when using a
+        # proxy file in non-default location. Default location has the current user's
+        # UID appended to it, so this is probably the cleanest way
+        conf_template = self.env.get_template("arc_config.ini")
+        conf_filename = None
+        with NamedTemporaryFile(delete=False) as conf_file:
+            conf_filename = conf_file.name
+            conf_file.write(conf_template.render({
+                "proxy_file": self.config["proxy_file"],
+                "certs_dir": self.config["certs_dir"]
+            }))
+
+        user_config = arc.UserConfig(conf_filename)
+        os.unlink(conf_filename)
 
         # Get the ExecutionTargets of this ComputingElement
         retriever = arc.ComputingServiceRetriever(user_config, [endpoint])
