@@ -1,5 +1,9 @@
-# This file includes the dependencies needed for developing/testing the library.
-# Minimal dependencies for using the library are specified in `install_requires` in `setup.py`
+# Minimal dependencies for using the library should also be specified in `install_requires` in
+# `setup.py`, so that users can install library with `pip install jasmin_arc`
+Jinja2
+enum34
+
+# Dependencies needed for developing/testing the library:
 
 # For generating documentation
 Sphinx
