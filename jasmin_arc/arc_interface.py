@@ -29,8 +29,8 @@ class ArcInterface(object):
         :param config_path: Path to config JSON file, or ``None`` to use the default settings
         :param log:         File-like object to write log messages to, or ``None`` to disable
                             logging. Use ``sys.stdout`` or ``sys.stderr`` to print messages
-        :param log_level:   The level of detail logs should show (default: :attr:`.LogLevels.INFO`).
-                            See :class:`.LogLevels` for the available levels
+        :param log_level:   The level of detail logs should show (default: `LogLevels.INFO`).
+                            See `LogLevels` for the available levels
 
         :raises InvalidConfigError: if config is not valid JSON or is otherwise invalid
         """
@@ -120,11 +120,10 @@ class ArcInterface(object):
         """
         Return the status of the given job
 
-        :param job_id:            ID of the job as returned by :meth:`submit_job`
+        :param job_id:            ID of the job as returned by `submit_job`
         :raises JobNotFoundError: if no job with the given ID could be found
 
-        :return: The status of the job (see :class:`.JobStatuses` for the
-                 available values)
+        :return: The status of the job (see `JobStatuses` for the available values)
         """
         user_config = self.get_user_config()
 
@@ -192,7 +191,7 @@ class ArcInterface(object):
         Return the cached user config, or create a new one. Also check if proxy has expired, and
         create a new one if so
 
-        :return: An instance of ``arc.UserConfig`` (see :meth:`create_user_config`)
+        :return: An instance of ``arc.UserConfig`` (see `create_user_config`)
         """
         # Call arcproxy to query how many seconds proxy is valid for
         try:

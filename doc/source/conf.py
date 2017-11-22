@@ -170,6 +170,9 @@ texinfo_documents = [
 autodoc_mock_imports = ["arc"]
 
 
+default_role = "any"
+
+
 def skip(app, what, name, obj, skip, options):
     if name == "__init__":
         return False
