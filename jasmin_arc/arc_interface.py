@@ -34,24 +34,6 @@ class ArcInterface(object):
 
         :raises InvalidConfigError: if config is not valid JSON or is otherwise invalid
         """
-        try:
-            config_dict = None
-
-            if config_path:
-                # Let errors reading file bubble to calling code
-                with open(config_path) as config_file:
-                    config_dict = json.load(config_file)
-
-            self.config = ConnectionConfig.create_config(config_dict)
-            ConnectionConfig.validate(self.config)
-
-        # Catch JSON parsing errors
-        except ValueError as e:
-            raise InvalidConfigError(e.message)
-
-        # Create jinja2 environment for loading JSDL template(s)
-        self.env = Environment(loader=PackageLoader(__name__, TEMPLATES_DIR),
-                               autoescape=select_autoescape(["xml"]))
 
         self.logger = arc.Logger(arc.Logger_getRootLogger(), "jobsubmit")
         # Add a log destination if the user has provided one
@@ -61,19 +43,37 @@ class ArcInterface(object):
             arc.Logger_getRootLogger().addDestination(log_dest)
             arc.Logger_getRootLogger().setThreshold(log_level.value)
 
+        config_dict = {}
+        if config_path:
+            try:
+                self.logger.msg(arc.DEBUG, "Using jasmin_arc config: {}".format(config_path))
+                # Let errors reading file bubble to calling code
+                with open(config_path) as config_file:
+                    config_dict = json.load(config_file)
+
+            # Catch JSON parsing errors
+            except ValueError as e:
+                raise InvalidConfigError(e.message)
+
+        self.config = ConnectionConfig(config_dict, logger=self.logger)
+
+        # Create jinja2 environment for loading JSDL template(s)
+        self.env = Environment(loader=PackageLoader(__name__, TEMPLATES_DIR),
+                               autoescape=select_autoescape(["xml"]))
+
     def submit_job(self, executable, *args):
         """
         Submit a job and return the job ID
 
         :param executable: The command to run on the LOTUS cluster
-        :param *args:      Arguments to pass to the executable
+        :param \*args:     Arguments to pass to the executable
 
         :raises NoTargetsAvailableError: if no execution targets can be found on the ARC server
         :raises JobSubmissionError:      if the job cannot be submitted to any targets
 
         :return: Job ID
         """
-        endpoint = arc.Endpoint(self.config["arc_server"], arc.Endpoint.COMPUTINGINFO)
+        endpoint = arc.Endpoint(self.config.ARC_SERVER, arc.Endpoint.COMPUTINGINFO)
 
         self.create_proxy()
         user_config = self.create_user_config()
@@ -145,10 +145,10 @@ class ArcInterface(object):
         :raises ProxyGenerationError: if the certificate cannot be generated
         """
         try:
-            output = subprocess.check_output([self.config["arcproxy_path"],
-                                             "-C", self.config["client_cert_file"],
-                                             "-K", self.config["pem_file"],
-                                             "-P", self.config["proxy_file"]])
+            output = subprocess.check_output([self.config.ARCPROXY_PATH,
+                                             "-C", self.config.CLIENT_CERT_FILE,
+                                             "-K", self.config.PEM_FILE,
+                                             "-P", self.config.PROXY_FILE])
         except subprocess.CalledProcessError:
             raise ProxyGenerationError("Could not create proxy with arcproxy")
 
@@ -173,8 +173,8 @@ class ArcInterface(object):
         with NamedTemporaryFile(delete=False) as conf_file:
             conf_filename = conf_file.name
             conf_file.write(conf_template.render({
-                "proxy_file": self.config["proxy_file"],
-                "certs_dir": self.config["certs_dir"]
+                "proxy_file": self.config.PROXY_FILE,
+                "certs_dir": self.config.CERTS_DIR
             }))
 
         user_config = arc.UserConfig(conf_filename)
