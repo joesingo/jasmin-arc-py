@@ -20,38 +20,27 @@ class LogLevels(Enum):
     descriptions come straight from the ARC library
     """
 
+    #: DEBUG level designates finer-grained informational events which should only be used for
+    #: debugging purposes
     DEBUG = arc.DEBUG
-    """
-    DEBUG level designates finer-grained informational events which should only be used for
-    debugging purposes
-    """
 
+    #: VERBOSE level designates fine-grained informational events that will give additional
+    #: information about the application
     VERBOSE = arc.VERBOSE
-    """
-    VERBOSE level designates fine-grained informational events that will give additional information
-    about the application
-    """
 
+    #: INFO level designates informational messages that highlight the progress of the
+    #: application at coarse-grained level
     INFO = arc.INFO
-    """
-    INFO level designates informational messages that highlight the progress of the application at
-    coarse-grained level
-    """
 
+    #: WARNING level designates potentially harmful situations
     WARNING = arc.WARNING
-    """
-    WARNING level designates potentially harmful situations
-    """
 
+    #: ERROR level designates error events that might still allow the application to continue
+    #: running
     ERROR = arc.ERROR
-    """
-    ERROR level designates error events that might still allow the application to continue running
-    """
 
+    #: FATAL level designates very severe error events that will presumably lead the application to
+    #: abort
     FATAL = arc.FATAL
-    """
-    FATAL level designates very severe error events that will presumably lead the application to
-    abort
-    """
 
 
