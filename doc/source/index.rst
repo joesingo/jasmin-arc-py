@@ -79,28 +79,21 @@ Configuration
 -------------
 
 ``jasmin_arc`` uses a JSON file to configure the connection to the ARC CE server.
-The required options are:
+The required options and default values are defined in the :class:`ConnectionConfig` class:
 
-* ``pem_file``: Path to the private key file associated with your grid certificate
-  (default: ``~/.arc/userkey-nopass.pem``)
+.. autoclass:: jasmin_arc.config.ConnectionConfig
+   :members:
 
-* ``client_cert_file``: Path to grid certificate file (default: ``~/.arc/usercert.pem``)
+For any options not included in the JSON config, the default values shown above will be used.
+For example, to use the default options except for the path to your private key and the ARC
+server URL, use the following JSON:
 
-* ``browser_cert_file``: **Description here** (default: ``~/certBundle.p12``)
+.. code-block:: json
 
-* ``certs_dir``: **Description here** (default: ``/etc/grid-security/certificates``)
-
-* ``arcproxy_path``: Path to the ``arcproxy`` binary, which is used to generate a proxy certificate
-  from the private key and certificate (default: ``/usr/bin/arcproxy``)
-
-* ``proxy_file``: Path to save the generated proxy certificate to (default: ``/tmp/x509up_u502``)
-
-* ``arc_server``: URL to the ARC server (default: ``jasmin-ce.ceda.ac.uk:60000/arex``)
-
-* ``outputs_filename``: The name of the file that will be retrieved when saving job outputs. This
-  should match the location output is written to in your job scripts. (default: ``outputs.zip``)
-
-* ``errors_filename``: Similar to ``outputs_filename`` but for error output. (default: ``errors_file.txt``)
+   {
+     "PEM_FILE": "/my/private/key",
+     "ARC_SERVER": "my-arc-server.ac.uk"
+   }
 
 ``ArcInterface`` class
 ----------------------
