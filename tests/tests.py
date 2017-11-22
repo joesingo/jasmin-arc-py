@@ -45,6 +45,6 @@ class ArcInterfaceTests(unittest.TestCase):
         with self.assertRaises(ProxyGenerationError):
             a.submit_job("/bin/echo")
 
+
 if __name__ == "__main__":
     unittest.main()
-

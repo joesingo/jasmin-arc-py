@@ -60,5 +60,3 @@ class LogLevels(Enum):
     #: FATAL level designates very severe error events that will presumably lead the application to
     #: abort
     FATAL = arc.FATAL
-
-

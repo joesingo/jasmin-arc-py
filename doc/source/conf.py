@@ -31,8 +31,8 @@ sys.path.insert(0, os.path.abspath('../..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+              'sphinx.ext.viewcode',
+              'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -168,6 +168,7 @@ texinfo_documents = [
 
 
 autodoc_mock_imports = ["arc"]
+
 
 def skip(app, what, name, obj, skip, options):
     if name == "__init__":

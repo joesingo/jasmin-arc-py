@@ -176,9 +176,9 @@ class ArcInterface(object):
         """
         try:
             output = subprocess.check_output([self.config.ARCPROXY_PATH,
-                                             "-C", self.config.CLIENT_CERT_FILE,
-                                             "-K", self.config.PEM_FILE,
-                                             "-P", self.config.PROXY_FILE])
+                                              "-C", self.config.CLIENT_CERT_FILE,
+                                              "-K", self.config.PEM_FILE,
+                                              "-P", self.config.PROXY_FILE])
         except subprocess.CalledProcessError:
             raise ProxyGenerationError("Could not create proxy with arcproxy")
 
@@ -196,8 +196,8 @@ class ArcInterface(object):
         """
         # Call arcproxy to query how many seconds proxy is valid for
         try:
-            output = subprocess.check_output([self.config.ARCPROXY_PATH, "-P", self.config.PROXY_FILE,
-                                              "-i", "validityLeft"])
+            output = subprocess.check_output([self.config.ARCPROXY_PATH, "-P",
+                                              self.config.PROXY_FILE, "-i", "validityLeft"])
         except subprocess.CalledProcessError:
             raise ProxyGenerationError("Failed to check proxy expiry time")
         except OSError as ex:
@@ -244,7 +244,8 @@ class ArcInterface(object):
 
     def get_job_descriptions(self, jsdl):
         """
-        Return an instance of ``arc.JobDescriptionList`` containing the job described by the given JSDL
+        Return an instance of ``arc.JobDescriptionList`` containing the job described by the
+        given JSDL
 
         :param jsdl: String containing the job description in JSDL format
         """
@@ -262,4 +263,3 @@ class ArcInterface(object):
             os.unlink(temp_filename)
 
         return job_descriptions
-

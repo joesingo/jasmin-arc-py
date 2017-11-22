@@ -69,4 +69,3 @@ class ConnectionConfig(object):
                 pass
 
         return val
-
