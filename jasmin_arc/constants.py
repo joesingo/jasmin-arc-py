@@ -7,11 +7,29 @@ class JobStatuses(Enum):
     """
     Possible values for job status
     """
-    COMPLETED = 'completed'
-    IN_PROGRESS = 'in progress'
-    NOT_STARTED = 'not started'
-    NOT_SUBMITTED = 'not submitted'
-    FAILED = 'failed'
+    COMPLETED = "completed"
+    IN_PROGRESS = "in progress"
+    NOT_STARTED = "not started"
+    NOT_SUBMITTED = "not submitted"
+    FAILED = "failed"
+
+
+#: Map job statuses as given by ARC to statuses in our simplified model
+ARC_STATUS_MAPPING = {
+    "Undefined": JobStatuses.FAILED,
+    "Accepted": JobStatuses.NOT_SUBMITTED,
+    "Preparing": JobStatuses.NOT_SUBMITTED,
+    "Submitting": JobStatuses.NOT_SUBMITTED,
+    "Hold": JobStatuses.IN_PROGRESS,
+    "Queuing": JobStatuses.NOT_STARTED,
+    "Running": JobStatuses.IN_PROGRESS,
+    "Finishing": JobStatuses.IN_PROGRESS,
+    "Finished": JobStatuses.COMPLETED,
+    "Killed": JobStatuses.FAILED,
+    "Failed": JobStatuses.FAILED,
+    "Deleted": JobStatuses.FAILED,
+    "Other": JobStatuses.FAILED
+}
 
 
 class LogLevels(Enum):

@@ -36,8 +36,12 @@ class ConnectionConfig(object):
     #: location output is written to in your job scripts.
     OUTPUTS_FILENAME = "outputs.zip"
 
-    #: Similar to ``OUTPUTS_FILENAME`` but for error output.
+    #: Similar to ``OUTPUTS_FILENAME`` but for error output
     ERRORS_FILENAME = "errors_file.txt"
+
+    #: The minimum number of seconds the proxy file may have left until expiry before a new proxy
+    #: is automatically generated
+    PROXY_RENEWAL_THRESHOLD = 10
 
     def __init__(self, config_dict, logger=None):
         """

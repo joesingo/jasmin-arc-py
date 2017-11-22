@@ -23,3 +23,7 @@ class NoTargetsAvailableError(Exception):
     No execution targets could be found to submit jobs to
     """
 
+class JobNotFoundError(Exception):
+    """
+    A job with the given ID could not be found
+    """

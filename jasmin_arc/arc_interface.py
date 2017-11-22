@@ -7,10 +7,10 @@ import subprocess
 from jinja2 import Environment, PackageLoader, select_autoescape
 import arc
 
-from constants import JobStatuses, LogLevels
+from constants import JobStatuses, ARC_STATUS_MAPPING, LogLevels
 from config import ConnectionConfig
 from exceptions import (InvalidConfigError, ProxyGenerationError, InvalidJobDescription,
-                        JobSubmissionError, NoTargetsAvailableError)
+                        JobSubmissionError, NoTargetsAvailableError, JobNotFoundError)
 
 
 # Location of directory containing templates for JSDL XML
@@ -61,6 +61,8 @@ class ArcInterface(object):
         self.env = Environment(loader=PackageLoader(__name__, TEMPLATES_DIR),
                                autoescape=select_autoescape(["xml"]))
 
+        self.cached_user_config = None
+
     def submit_job(self, executable, *args):
         """
         Submit a job and return the job ID
@@ -75,8 +77,7 @@ class ArcInterface(object):
         """
         endpoint = arc.Endpoint(self.config.ARC_SERVER, arc.Endpoint.COMPUTINGINFO)
 
-        self.create_proxy()
-        user_config = self.create_user_config()
+        user_config = self.get_user_config()
 
         # Get the ExecutionTargets of this ComputingElement
         retriever = arc.ComputingServiceRetriever(user_config, [endpoint])
@@ -118,8 +119,37 @@ class ArcInterface(object):
     def get_job_status(self, job_id):
         """
         Return the status of the given job
+
+        :param job_id:            ID of the job as returned by :meth:`submit_job`
+        :raises JobNotFoundError: if no job with the given ID could be found
+
+        :return: The status of the job (see :class:`.JobStatuses` for the
+                 available values)
         """
-        return JobStatuses.COMPLETED
+        user_config = self.get_user_config()
+
+        # Create a JobSupervisor to handle all the jobs
+        job_supervisor = arc.JobSupervisor(user_config)
+
+        # Retrieve all the jobs from this computing element
+        endpoint = arc.Endpoint(self.config.ARC_SERVER, arc.Endpoint.JOBLIST)
+        retriever = arc.JobListRetriever(user_config)
+        retriever.addConsumer(job_supervisor)
+        retriever.addEndpoint(endpoint)
+        retriever.wait()
+
+        # Update the states of the jobs
+        job_supervisor.Update()
+
+        # Get all jobs and find job by ID
+        jobs = job_supervisor.GetAllJobs()
+
+        for job in jobs:
+            if job_id == job.JobID:
+                # Map ARC status to a value in JobStatuses
+                return ARC_STATUS_MAPPING[job.State.GetGeneralState()]
+
+        raise JobNotFoundError("Could not find a job with ID '{}'".format(job_id))
 
     def cancel_job(self, job_id):
         """
@@ -157,14 +187,45 @@ class ArcInterface(object):
 
         self.logger.msg(arc.INFO, "arcproxy output:\n{}".format(output))
 
+    def get_user_config(self):
+        """
+        Return the cached user config, or create a new one. Also check if proxy has expired, and
+        create a new one if so
+
+        :return: An instance of ``arc.UserConfig`` (see :meth:`create_user_config`)
+        """
+        # Call arcproxy to query how many seconds proxy is valid for
+        try:
+            output = subprocess.check_output([self.config.ARCPROXY_PATH, "-P", self.config.PROXY_FILE,
+                                              "-i", "validityLeft"])
+        except subprocess.CalledProcessError:
+            raise ProxyGenerationError("Failed to check proxy expiry time")
+        except OSError as ex:
+            raise OSError("Failed to run arcproxy command: {}".format(ex))
+
+        try:
+            seconds_left = int(output)
+        except ValueError as ex:
+            raise ProxyGenerationError("Failed to determine proxy expiry time: {}".format(ex))
+
+        if seconds_left <= self.config.PROXY_RENEWAL_THRESHOLD:
+            self.logger.msg(arc.INFO, "Renewing proxy")
+            self.create_proxy()
+        # Return cached user config or create a new one
+        if self.cached_user_config:
+            return self.cached_user_config
+        self.cached_user_config = self.create_user_config()
+        return self.cached_user_config
+
     def create_user_config(self):
         """
-        Create a user config for use with ARC client. Must be called after proxy has been created
-        with :meth:`create_proxy`.
+        Create a user config for use with ARC client
 
         :return: An instance of ``arc.UserConfig`` containing information about the necessary
                  keys, certificates and proxy files
         """
+        self.create_proxy()
+
         # Write client config to temp file - arc python library seems buggy when using a
         # proxy file in non-default location. Default location has the current user's
         # UID appended to it, so this is probably the cleanest way
