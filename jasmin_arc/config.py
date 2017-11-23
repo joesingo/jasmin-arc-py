@@ -29,7 +29,7 @@ class ConnectionConfig(object):
     #: URL to the ARC server
     ARC_SERVER = "jasmin-ce.ceda.ac.uk:60000/arex"
 
-    #: The minimum number of seconds the proxy file may have left until expiry before a new proxy
+    #: The number of seconds the proxy file can have till expiry before a new proxy
     #: is automatically generated
     PROXY_RENEWAL_THRESHOLD = 10
 

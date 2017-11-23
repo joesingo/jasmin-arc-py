@@ -32,7 +32,7 @@ class ArcInterfaceTests(unittest.TestCase):
 
     def test_proxy_generation_failure(self):
         """
-        Test that using a non-existant key file raises the expected exception
+        Test that using a non-existent key file raises the expected exception
         """
         filename = None
         with NamedTemporaryFile(delete=False) as config_file:

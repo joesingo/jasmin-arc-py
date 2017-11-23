@@ -61,7 +61,7 @@ On Ubuntu:
    apt-get install nordugrid-arc-python
    apt-get install globus-gsi-cert-utils-progs
 
-If working in a virtual enviroment you may also need to add the location of the ARC installation to
+If working in a virtual environment you may also need to add the location of the ARC installation to
 your ``PYTHONPATH``:
 
 .. code-block:: bash
@@ -72,8 +72,6 @@ your ``PYTHONPATH``:
 
 API Usage
 =========
-
-Some introductory text about the API here (quickstart guide?)
 
 Quickstart
 ----------
@@ -124,9 +122,9 @@ string of numbers at the end is the last component of the job ID.
 .. note::
 
    You do not need to worry about the actual path to the session directory, as the current working
-   directory will be set to corerctly when your jobs are running.
+   directory will be set to corectlyy when your jobs run.
 
-Any files written to this directory can be retreived with `ArcInterface.save_job_outputs`. The
+Any files written to this directory can be retrieved with `ArcInterface.save_job_outputs`. The
 directory structure of the session directory is preserved, so your jobs can create sub-directories
 and files within them if required.
 
@@ -134,7 +132,7 @@ The contents of ``stdout`` and ``stderr`` are written to ``stdout.txt`` and ``st
 respectively.
 
 All outputs are downloaded to a temporary directory (in ``/tmp`` on UNIX platforms), and the path
-to this directory is returned. You may then move files to a more permenant location as required.
+to this directory is returned. You may then move files to a more permanent location as required.
 
 Indices and tables
 ==================
