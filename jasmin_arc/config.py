@@ -16,10 +16,7 @@ class ConnectionConfig(object):
     #: Path to grid certificate file
     CLIENT_CERT_FILE = "~/.arc/usercert.pem"
 
-    #: **Description here**
-    BROWSER_CERT_FILE = "~/certBundle.p12"
-
-    #: **Description here**
+    #: Path to directory containing trusted CA certificates
     CERTS_DIR = "/etc/grid-security/certificates"
 
     #: Path to the ``arcproxy`` binary, which is used to generate a proxy certificate from the
