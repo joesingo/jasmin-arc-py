@@ -125,36 +125,20 @@ class ArcInterface(object):
 
         :return: The status of the job (see `JobStatuses` for the available values)
         """
-        user_config = self.get_user_config()
-
-        # Create a JobSupervisor to handle all the jobs
-        job_supervisor = arc.JobSupervisor(user_config)
-
-        # Retrieve all the jobs from this computing element
-        endpoint = arc.Endpoint(self.config.ARC_SERVER, arc.Endpoint.JOBLIST)
-        retriever = arc.JobListRetriever(user_config)
-        retriever.addConsumer(job_supervisor)
-        retriever.addEndpoint(endpoint)
-        retriever.wait()
-
-        # Update the states of the jobs
-        job_supervisor.Update()
-
-        # Get all jobs and find job by ID
-        jobs = job_supervisor.GetAllJobs()
-
-        for job in jobs:
-            if job_id == job.JobID:
-                # Map ARC status to a value in JobStatuses
-                return ARC_STATUS_MAPPING[job.State.GetGeneralState()]
-
-        raise JobNotFoundError("Could not find a job with ID '{}'".format(job_id))
+        job = self.get_job(job_id)
+        # Map ARC status to a value in JobStatuses
+        return ARC_STATUS_MAPPING[job.State.GetGeneralState()]
 
     def cancel_job(self, job_id):
         """
         Cancel the given job
+
+        :param job_id:            ID of the job as returned by `submit_job`
+        :raises JobNotFoundError: if no job with the given ID could be found
         """
         self.logger.msg(arc.INFO, "Cancelling job {}".format(job_id))
+        job = self.get_job(job_id)
+        job.Cancel()
 
     def save_job_outputs(self, job_id, output_path=None, errors_path=None):
         """
@@ -185,6 +169,38 @@ class ArcInterface(object):
             raise OSError("Failed to run arcproxy command: {}".format(ex))
 
         self.logger.msg(arc.INFO, "arcproxy output:\n{}".format(output))
+
+    def get_job(self, job_id):
+        """
+        Return an instance of ``arc.Job`` representing the job with the given ID
+
+        :param job_id:            ID of the job as returned by `submit_job`
+        :raises JobNotFoundError: if no job with the given ID could be found
+        :return:                  Instance of ``arc.Job`` representing the job
+        """
+        user_config = self.get_user_config()
+
+        # Create a JobSupervisor to handle all the jobs
+        job_supervisor = arc.JobSupervisor(user_config)
+
+        # Retrieve all the jobs from this computing element
+        endpoint = arc.Endpoint(self.config.ARC_SERVER, arc.Endpoint.JOBLIST)
+        retriever = arc.JobListRetriever(user_config)
+        retriever.addConsumer(job_supervisor)
+        retriever.addEndpoint(endpoint)
+        retriever.wait()
+
+        # Update the states of the jobs
+        job_supervisor.Update()
+
+        # Get all jobs and find job by ID
+        jobs = job_supervisor.GetAllJobs()
+
+        for job in jobs:
+            if job.JobID == job_id:
+                return job
+
+        raise JobNotFoundError("Could not find a job with ID '{}'".format(job_id))
 
     def get_user_config(self):
         """
