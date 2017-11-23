@@ -90,29 +90,7 @@ To get started, create a JSON config file that points to your private key and ce
 
 All actions are performed through the `ArcInterface` class. Some examples:
 
-.. code-block:: python
-
-   """
-   Submit a job and wait till it completes
-   """
-   import time
-   from jasmin_arc import ArcInterface, JobStatuses
-
-   arc_iface = ArcInterface("/path/to/config.json")
-   job_id = arc_iface.submit_job("myscript.sh", "-o", "some-option")
-
-   while True:
-       status = arc_iface.get_job_status(job_id)
-       print("Job status is {}".format(status))
-
-       if status == JobStatuses.COMPLETED:
-           print("Job is finished!")
-           break
-
-       time.sleep(1)
-
-   # TODO: Get job outputs
-
+.. literalinclude:: examples/basic.py
 
 Configuration
 -------------

@@ -32,13 +32,6 @@ class ConnectionConfig(object):
     #: URL to the ARC server
     ARC_SERVER = "jasmin-ce.ceda.ac.uk:60000/arex"
 
-    #: The name of the file that will be retrieved when saving job outputs. This should match the
-    #: location output is written to in your job scripts.
-    OUTPUTS_FILENAME = "outputs.zip"
-
-    #: Similar to ``OUTPUTS_FILENAME`` but for error output
-    ERRORS_FILENAME = "errors_file.txt"
-
     #: The minimum number of seconds the proxy file may have left until expiry before a new proxy
     #: is automatically generated
     PROXY_RENEWAL_THRESHOLD = 10

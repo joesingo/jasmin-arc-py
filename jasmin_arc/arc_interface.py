@@ -1,6 +1,6 @@
 import os
 import sys
-from tempfile import NamedTemporaryFile
+import tempfile
 import json
 import subprocess
 
@@ -140,15 +140,29 @@ class ArcInterface(object):
         job = self.get_job(job_id)
         job.Cancel()
 
-    def save_job_outputs(self, job_id, output_path=None, errors_path=None):
+    def save_job_outputs(self, job_id):
         """
-        Retrieve the output and errors files for a job and save them to the paths given
-        """
-        if output_path:
-            self.logger.msg(arc.INFO, "Saving output file to '{}'".format(output_path))
+        Retrieve output files from a job and save them to a temp directory. ``stdout`` and
+        ``stderr`` outputs are saved as ``stdout.txt`` and ``stderr.txt`` respectively.
 
-        if errors_path:
-            self.logger.msg(arc.INFO, "Saving errors file to '{}'".format(errors_path))
+        :param job_id:            ID of the job as returned by `submit_job`
+        :raises JobNotFoundError: if no job with the given ID could be found
+
+        :return: Path to the directory the output files were saved in, or ``None`` if no files
+                 were saved
+        """
+        job = self.get_job(job_id)
+        user_config = self.get_user_config()
+        temp_dir = tempfile.mkdtemp()
+        # Last arument is 'force' - whether to continue if destination directory already exists
+        success = job.Retrieve(user_config, arc.URL("file://{}".format(temp_dir)), True)
+
+        # Remove temp dir and fail if no files were downloaded
+        if not os.listdir(temp_dir):
+            success = False
+            os.rmdir(temp_dir)
+
+        return temp_dir if success else None
 
     def create_proxy(self):
         """
@@ -246,7 +260,7 @@ class ArcInterface(object):
         # UID appended to it, so this is probably the cleanest way
         conf_template = self.env.get_template("arc_config.ini")
         conf_filename = None
-        with NamedTemporaryFile(delete=False) as conf_file:
+        with tempfile.NamedTemporaryFile(delete=False) as conf_file:
             conf_filename = conf_file.name
             conf_file.write(conf_template.render({
                 "proxy_file": self.config.PROXY_FILE,
@@ -266,7 +280,7 @@ class ArcInterface(object):
         """
         job_descriptions = arc.JobDescriptionList()
         temp_filename = None
-        with NamedTemporaryFile(delete=False) as temp_file:
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_filename = temp_file.name
             temp_file.write(jsdl)
 

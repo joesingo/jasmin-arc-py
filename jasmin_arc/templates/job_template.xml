@@ -11,8 +11,8 @@
        {% for arg in arguments %}
            <posix:Argument>{{ arg }}</posix:Argument>
        {% endfor %}
-       <posix:Output>{{ output_filename }}</posix:Output>
-       <posix:Error>{{ errors_filename }}</posix:Error>
+       <posix:Output>stdout.txt</posix:Output>
+       <posix:Error>stderr.txt</posix:Error>
      </posix:POSIXApplication>
    </Application>
    </JobDescription>
