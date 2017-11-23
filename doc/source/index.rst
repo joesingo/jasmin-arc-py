@@ -75,6 +75,45 @@ API Usage
 
 Some introductory text about the API here (quickstart guide?)
 
+Quickstart
+----------
+
+To get started, create a JSON config file that points to your private key and certificate
+(see `Configuration`_ for the full list of config options):
+
+.. code-block:: json
+
+   {
+     "PEM_FILE": "/path/to/private/key.pem",
+     "CLIENT_CERT_FILE": "/path/to/cert.pem",
+   }
+
+All actions are performed through the `ArcInterface` class. Some examples:
+
+.. code-block:: python
+
+   """
+   Submit a job and wait till it completes
+   """
+   import time
+   from jasmin_arc import ArcInterface, JobStatuses
+
+   arc_iface = ArcInterface("/path/to/config.json")
+   job_id = arc_iface.submit_job("myscript.sh", "-o", "some-option")
+
+   while True:
+       status = arc_iface.get_job_status(job_id)
+       print("Job status is {}".format(status))
+
+       if status == JobStatuses.COMPLETED:
+           print("Job is finished!")
+           break
+
+       time.sleep(1)
+
+   # TODO: Get job outputs
+
+
 Configuration
 -------------
 
@@ -95,14 +134,6 @@ server URL, use the following JSON:
      "PEM_FILE": "/my/private/key",
      "ARC_SERVER": "my-arc-server.ac.uk"
    }
-
-``ArcInterface`` class
-----------------------
-
-.. automodule:: jasmin_arc.arc_interface
-    :members:
-    :undoc-members:
-    :noindex:
 
 Indices and tables
 ==================
