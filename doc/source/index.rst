@@ -113,6 +113,29 @@ server URL, use the following JSON:
      "ARC_SERVER": "my-arc-server.ac.uk"
    }
 
+Job Output
+----------
+
+Jobs submitted to LOTUS through ARC-CE are run from a *session directory* unique to each job. The
+path to this directory will be something like
+``/work/scratch/arc/grid/RmCMDmqK9brnMQPDjq2vDwNoABFKDmABFKDmvpFKDmWEFKDmnXLGem``, where the long
+string of numbers at the end is the last component of the job ID.
+
+.. note::
+
+   You do not need to worry about the actual path to the session directory, as the current working
+   directory will be set to corerctly when your jobs are running.
+
+Any files written to this directory can be retreived with `ArcInterface.save_job_outputs`. The
+directory structure of the session directory is preserved, so your jobs can create sub-directories
+and files within them if required.
+
+The contents of ``stdout`` and ``stderr`` are written to ``stdout.txt`` and ``stderr.txt``
+respectively.
+
+All outputs are downloaded to a temporary directory (in ``/tmp`` on UNIX platforms), and the path
+to this directory is returned. You may then move files to a more permenant location as required.
+
 Indices and tables
 ==================
 
