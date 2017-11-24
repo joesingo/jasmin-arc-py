@@ -82,6 +82,16 @@ To run the tests, use:
 
    python tests/tests.py
 
+There are also some test that require some manual input, such as checking when a job has finished
+by logging into JASMIN and inspecting the output of ``bjobs``. To run these tests use
+
+.. code-block:: bash
+
+   python tests/manual_tests.py <path to config>
+
+If ARC jobs do not run under the same user as you log in to JASMIN with, use ``bjobs -u <user> -a``
+instead.
+
 Documentation
 -------------
 
