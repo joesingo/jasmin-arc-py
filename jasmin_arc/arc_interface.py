@@ -10,7 +10,8 @@ import arc
 from constants import JobStatuses, ARC_STATUS_MAPPING, LogLevels
 from config import ConnectionConfig
 from exceptions import (InvalidConfigError, ProxyGenerationError, InvalidJobDescription,
-                        JobSubmissionError, NoTargetsAvailableError, JobNotFoundError)
+                        JobSubmissionError, NoTargetsAvailableError, JobNotFoundError,
+                        InputFileError)
 
 
 # Location of directory containing templates for JSDL XML
@@ -63,13 +64,17 @@ class ArcInterface(object):
 
         self.cached_user_config = None
 
-    def submit_job(self, executable, *args):
+    def submit_job(self, executable, args=[], input_files=[]):
         """
         Submit a job and return the job ID
 
-        :param executable: The command to run on the LOTUS cluster
-        :param \*args:     Arguments to pass to the executable
+        :param executable:  The command to run on the LOTUS cluster
+        :param args:        List of arguments to pass to the executable
+        :param input_files: A list of paths to local files to copy to the remote session directory
+                            (the directory the job will run from on JASMIN)
 
+        :raises InputFileError:          if any of the specified input files do not exist or are
+                                         directories
         :raises NoTargetsAvailableError: if no execution targets can be found on the ARC server
         :raises JobSubmissionError:      if the job cannot be submitted to any targets
 
@@ -87,11 +92,20 @@ class ArcInterface(object):
         if len(targets) == 0:
             raise NoTargetsAvailableError("No targets available")
 
+        input_files_map = {}  # Map local paths to destination file names
+        for filename in input_files:
+            if not os.path.isfile(filename):
+                raise InputFileError("{} is not a file".format(filename))
+
+            # Use absolute local path
+            input_files_map[os.path.abspath(filename)] = os.path.basename(filename)
+
         template = self.env.get_template("job_template.xml")
         jsdl = template.render({
             "name": "ARC job",  # TODO: Use sensible name or omit
             "executable": executable,
-            "arguments": args
+            "arguments": args,
+            "input_files_map": input_files_map
         })
         job_descriptions = self.get_job_descriptions(jsdl)
 

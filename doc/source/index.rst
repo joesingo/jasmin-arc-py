@@ -111,8 +111,8 @@ server URL, use the following JSON:
      "ARC_SERVER": "my-arc-server.ac.uk"
    }
 
-Job Output
-----------
+Job input/output files
+----------------------
 
 Jobs submitted to LOTUS through ARC-CE are run from a *session directory* unique to each job. The
 path to this directory will be something like
@@ -123,6 +123,9 @@ string of numbers at the end is the last component of the job ID.
 
    You do not need to worry about the actual path to the session directory, as the current working
    directory will be set correctly when your jobs run.
+
+Any input files passed to `ArcInterface.submit_job` are copied into this directory, and can be
+accessed from your jobs.
 
 Any files written to this directory can be retrieved with `ArcInterface.save_job_outputs`. The
 directory structure of the session directory is preserved, so your jobs can create sub-directories

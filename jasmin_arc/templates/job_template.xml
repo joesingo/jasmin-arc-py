@@ -1,20 +1,29 @@
 <JobDefinition
  xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl"
  xmlns:posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix">
- <JobDescription>
-   <JobIdentification>
-     <JobName>{{ name }}</JobName>
-   </JobIdentification>
-   <Application>
-     <posix:POSIXApplication>
-       <posix:Executable>{{ executable }}</posix:Executable>
-       {% for arg in arguments %}
-           <posix:Argument>{{ arg }}</posix:Argument>
-       {% endfor %}
-       <posix:Output>stdout.txt</posix:Output>
-       <posix:Error>stderr.txt</posix:Error>
-     </posix:POSIXApplication>
-   </Application>
-   </JobDescription>
+  <JobDescription>
+    <JobIdentification>
+      <JobName>{{ name }}</JobName>
+    </JobIdentification>
+    <Application>
+      <posix:POSIXApplication>
+        <posix:Executable>{{ executable }}</posix:Executable>
+        {% for arg in arguments %}
+          <posix:Argument>{{ arg }}</posix:Argument>
+        {% endfor %}
+        <posix:Output>stdout.txt</posix:Output>
+        <posix:Error>stderr.txt</posix:Error>
+      </posix:POSIXApplication>
+    </Application>
+    {% for local_path, name in input_files_map.items() %}
+      <DataStaging>
+        <FileName>{{ name }}</FileName>
+        <CreationFlag>overwrite</CreationFlag>
+        <Source>
+          <URI>file://{{ local_path }}</URI>
+        </Source>
+      </DataStaging>
+    {% endfor %}
+  </JobDescription>
 </JobDefinition>
 

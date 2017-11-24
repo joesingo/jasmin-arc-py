@@ -32,3 +32,9 @@ class JobNotFoundError(Exception):
     """
     A job with the given ID could not be found
     """
+
+
+class InputFileError(Exception):
+    """
+    Input file does not exist or is not a file
+    """
