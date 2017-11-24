@@ -159,7 +159,8 @@ class ArcInterface(object):
         """
         self.logger.msg(arc.INFO, "Cancelling job {}".format(job_id))
         job = self.get_job(job_id)
-        job.Cancel()
+        if not job.Cancel():
+            self.logger.msg(arc.WARNING, "Failed to cancel job")
 
     def save_job_outputs(self, job_id):
         """
@@ -175,7 +176,7 @@ class ArcInterface(object):
         job = self.get_job(job_id)
         user_config = self.get_user_config()
         temp_dir = tempfile.mkdtemp()
-        # Last arument is 'force' - whether to continue if destination directory already exists
+        # Last argument is 'force' - whether to continue if destination directory already exists
         success = job.Retrieve(user_config, arc.URL("file://{}".format(temp_dir)), True)
 
         # Remove temp dir and fail if no files were downloaded

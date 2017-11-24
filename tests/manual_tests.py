@@ -28,11 +28,13 @@ class ManualTests(unittest.TestCase):
         with open(os.path.join(out_dir, filename)) as f:
             return f.read()
 
-    def wait_for_completion(self, extra=None):
+    def wait_for_completion(self, msg=None, extra=None):
         sub_time = datetime.now().strftime("%H:%M")
+        if not msg:
+            msg = ("Take note of submission time (~{}) and monitor job progress with `bjobs -a` on "
+                   "JASMIN. Press return when job finishes".format(sub_time))
         print("")
-        print("Take note of submission time (~{}) and monitor job progress with `bjobs -a` "
-              "on JASMIN. Press return when job finishes".format(sub_time))
+        print(msg)
         if extra:
             print(extra)
 
@@ -98,6 +100,26 @@ class ManualTests(unittest.TestCase):
         # ...and check each input file is present
         for i in range(n):
             self.assertIn("./" + format_str.format(i), lines)
+
+    def test_cancel_job(self):
+        """
+        Submit a long-running job, cancel is, and check that the job is actually cancelled
+        """
+        a = ARC_INTERFACE
+        # Submit a job that would take a very long to finish
+        script = "seq 1 10000 | while read x; do echo '$x'; sleep 1; done"
+        job_id = a.submit_job("/bin/bash", ["-c", script])
+        self.wait_for_completion(msg="Press return when job has started (run `bjobs` on JASMIN "
+                                     "to see running jobs)")
+        a.cancel_job(job_id)
+        answer = None
+        while answer not in ("y", "n"):
+            print("Has job been cancelled successfully? (y/n)")
+            answer = raw_input()
+
+        if answer == "n":
+            self.fail("Job not cancelled")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
