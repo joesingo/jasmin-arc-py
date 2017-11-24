@@ -29,6 +29,10 @@ class ConnectionConfig(object):
     #: URL to the ARC server
     ARC_SERVER = "jasmin-ce.ceda.ac.uk:60000/arex"
 
+    #: Number of seconds to set the validity period to when generating a proxy file (default: 12
+    #: hours)
+    PROXY_VALIDITY_PERIOD = 12 * 60 * 60
+
     #: The number of seconds the proxy file can have till expiry before a new proxy
     #: is automatically generated
     PROXY_RENEWAL_THRESHOLD = 10

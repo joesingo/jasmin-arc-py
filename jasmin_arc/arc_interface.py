@@ -193,10 +193,14 @@ class ArcInterface(object):
         :raises ProxyGenerationError: if the certificate cannot be generated
         """
         try:
-            output = subprocess.check_output([self.config.ARCPROXY_PATH,
-                                              "-C", self.config.CLIENT_CERT_FILE,
-                                              "-K", self.config.PEM_FILE,
-                                              "-P", self.config.PROXY_FILE])
+            output = subprocess.check_output([
+                self.config.ARCPROXY_PATH,
+                "-C", self.config.CLIENT_CERT_FILE,
+                "-K", self.config.PEM_FILE,
+                "-P", self.config.PROXY_FILE,
+                "-c", "validityPeriod={}".format(self.config.PROXY_VALIDITY_PERIOD)
+            ])
+
         except subprocess.CalledProcessError:
             raise ProxyGenerationError("Could not create proxy with arcproxy")
 
