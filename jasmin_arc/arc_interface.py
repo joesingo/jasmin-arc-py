@@ -114,6 +114,13 @@ class ArcInterface(object):
                                      .format(len(targets)))
 
         self.logger.msg(arc.INFO, "Started job with ID: {}".format(job.JobID))
+
+        # Write information on submitted job to local job list so standard arc tools (arcstat,
+        # arcget etc) can be used with this job
+        job_list = arc.JobInformationStorageBDB(self.config.JOBS_INFO_FILE)
+        if not job_list.Write([job]):
+          self.logger.msg(arc.WARNING, "Failed to write to local job list {}".format(self.config.JOBS_INFO_FILE))
+
         return job.JobID
 
     def get_job_status(self, job_id):

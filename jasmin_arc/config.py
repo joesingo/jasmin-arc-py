@@ -33,6 +33,10 @@ class ConnectionConfig(object):
     #: is automatically generated
     PROXY_RENEWAL_THRESHOLD = 10
 
+    #: Path to job information file used by ARC client tools (arcstat, arcget etc) to load
+    #: information about submitted jobs
+    JOBS_INFO_FILE = "~/.arc/jobs.dat"
+
     def __init__(self, config_dict, logger=None):
         """
         :param config_dict: A dictionary containing options to override. Each key should be one of
