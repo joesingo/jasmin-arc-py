@@ -1,13 +1,11 @@
 import unittest
 import os
-import sys
 import subprocess
 import json
 import tempfile
-import time
 
 from jasmin_arc.arc_interface import ArcInterface
-from jasmin_arc.exceptions import InvalidConfigError, ProxyGenerationError
+from jasmin_arc.exceptions import InvalidConfigError, ProxyGenerationError, JobNotFoundError
 from base import ArcTestCase
 
 
@@ -16,10 +14,7 @@ from base import ArcTestCase
 BASE_TEMP_DIR = tempfile.mkdtemp()
 
 
-class ValidationTests(unittest.TestCase):
-    """
-    Test things in ArcInterface related to validation
-    """
+class JasminArcTests(ArcTestCase):
 
     def test_invalid_config(self):
         """
@@ -46,20 +41,42 @@ class ValidationTests(unittest.TestCase):
         with self.assertRaises(ProxyGenerationError):
             a.submit_job("/bin/echo")
 
+    def test_invalid_job_id(self):
+        """
+        Attempt to retrieve job status using an invalid ID, and check the expected exception is
+        raised
+        """
+        self.assertRaises(JobNotFoundError, self.ARC_INTERFACE.get_job_status, "invalid ID here")
+
+    def test_proxy_renewal(self):
+        """
+        Test that the proxy file is automatically renewed when it comes close to its expiry time
+        """
+        a = self.ARC_INTERFACE
+        n = 60
+        a.config.PROXY_VALIDITY_PERIOD = n
+        a.config.PROXY_RENEWAL_THRESHOLD = n - 3
+
+        # Delete proxy if it exists from previous tests
+        if os.path.isfile(a.config.PROXY_FILE):
+            os.unlink(a.config.PROXY_FILE)
+
+        # Create initial proxy and save creation time
+        a.get_user_config()
+        t1 = os.path.getmtime(a.config.PROXY_FILE)
+        # Wait till after proxy should be renewed
+        self.wait(5)
+        a.get_user_config()
+        # Check proxy file has been modified
+        t2 = os.path.getmtime(a.config.PROXY_FILE)
+        self.assertTrue(t2 > t1)
+
 
 class JobSubmissionTests(ArcTestCase):
 
     # Set how long to wait for different types of job to finish
     BASIC_SUBMISSION_TIMEOUT = 10
     INPUT_FILE_SUBMISSION_TIMEOUT = 120
-
-    def wait(self, n):
-        sys.stdout.write("Waiting for {} seconds".format(n))
-        for _ in range(n):
-            sys.stdout.write(".")
-            sys.stdout.flush()
-            time.sleep(1)
-        sys.stdout.write("\n")
 
     def get_output_file_contents(self, job_id, filename):
         """
@@ -128,29 +145,6 @@ class JobSubmissionTests(ArcTestCase):
         lines = stdout.split("\n")
         for i in range(n):
             self.assertIn("./" + format_str.format(i), lines)
-
-    def test_proxy_renewal(self):
-        """
-        Test that the proxy file is automatically renewed when it comes close to its expiry time
-        """
-        a = self.ARC_INTERFACE
-        n = 60
-        a.config.PROXY_VALIDITY_PERIOD = n
-        a.config.PROXY_RENEWAL_THRESHOLD = n - 3
-
-        # Delete proxy if it exists from previous tests
-        if os.path.isfile(a.config.PROXY_FILE):
-            os.unlink(a.config.PROXY_FILE)
-
-        # Create initial proxy and save creation time
-        a.get_user_config()
-        t1 = os.path.getmtime(a.config.PROXY_FILE)
-        # Wait till after proxy should be renewed
-        self.wait(5)
-        a.get_user_config()
-        # Check proxy file has been modified
-        t2 = os.path.getmtime(a.config.PROXY_FILE)
-        self.assertTrue(t2 > t1)
 
 
 if __name__ == "__main__":
