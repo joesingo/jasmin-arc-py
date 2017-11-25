@@ -249,6 +249,12 @@ class ArcInterface(object):
 
         :return: An instance of ``arc.UserConfig`` (see `create_user_config`)
         """
+        # Create a new config if this is the first time
+        if not self.cached_user_config:
+            self.cached_user_config = self.create_user_config()
+            return self.cached_user_config
+
+        # Check proxy is still valid if using cached user config
         # Call arcproxy to query how many seconds proxy is valid for
         try:
             output = subprocess.check_output([self.config.ARCPROXY_PATH, "-P",
@@ -266,10 +272,7 @@ class ArcInterface(object):
         if seconds_left <= self.config.PROXY_RENEWAL_THRESHOLD:
             self.logger.msg(arc.INFO, "Renewing proxy")
             self.create_proxy()
-        # Return cached user config or create a new one
-        if self.cached_user_config:
-            return self.cached_user_config
-        self.cached_user_config = self.create_user_config()
+
         return self.cached_user_config
 
     def create_user_config(self):
