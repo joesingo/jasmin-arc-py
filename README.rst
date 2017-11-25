@@ -76,18 +76,24 @@ To install any dependencies required for testing or building documentation, use:
 Tests
 -----
 
-To run the tests, use:
+To run the tests, set the ``JASMIN_ARC_CONFIG`` environmental variable to specify the credentials
+to use use in the tests:
 
+.. code-block:: bash
+
+   export JASMIN_ARC_CONFIG=/path/to/config
+
+Then run:
 .. code-block:: bash
 
    python tests/tests.py
 
-There are also some test that require some manual input, such as checking when a job has finished
-by logging into JASMIN and inspecting the output of ``bjobs``. To run these tests use
+There are also some test that require some manual input, such as logging into JASMIN and checking
+the status of a job with ``bjobs -a``. To run these tests use:
 
 .. code-block:: bash
 
-   python tests/manual_tests.py <path to config>
+   python tests/manual_tests.py
 
 If ARC jobs do not run under the same user as you log in to JASMIN with, use ``bjobs -u <user> -a``
 instead.
