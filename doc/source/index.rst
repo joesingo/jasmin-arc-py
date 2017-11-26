@@ -13,6 +13,14 @@ Welcome to jasmin-arc-py's documentation!
 ``jasmin_arc`` is a Python library to facilitate running jobs on LOTUS_ on JASMIN via the
 ARC-CE server.
 
+It supports:
+
+- Submitting jobs
+- Uploading input files to be processed by jobs
+- Retrieving job status
+- Downloading job outputs
+- Cancelling jobs
+
 .. _LOTUS: http://jasmin.ac.uk/services/lotus/
 
 To get started, obtain the necessary certificates by following the instructions
@@ -86,9 +94,20 @@ To get started, create a JSON config file that points to your private key and ce
      "CLIENT_CERT": "/path/to/cert.pem",
    }
 
-All actions are performed through the `ArcInterface` class. Some examples:
+All actions are performed through the `ArcInterface` class. A basic example is included below:
 
 .. literalinclude:: examples/basic.py
+
+See `Examples`_ for more examples.
+
+API
+---
+
+`ArcInterface` contains methods for interacting with ARC on JASMIN. The most useful methods are
+listed below:
+
+.. autoclass:: jasmin_arc.arc_interface.ArcInterface
+   :members: __init__, submit_job, get_job_status, save_job_outputs, cancel_job
 
 Configuration
 -------------
@@ -136,6 +155,17 @@ respectively.
 
 All outputs are downloaded to a temporary directory (in ``/tmp`` on UNIX platforms), and the path
 to this directory is returned. You may then move files to a more permanent location as required.
+
+Examples
+--------
+
+Setting log output destination and logging level:
+
+.. literalinclude:: examples/logging.py
+
+Uploading and processing input files
+
+.. literalinclude:: examples/input_files.py
 
 Indices and tables
 ==================
