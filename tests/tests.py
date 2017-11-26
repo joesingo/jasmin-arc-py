@@ -106,6 +106,17 @@ class JobSubmissionTests(ArcTestCase):
         stdout = self.get_output_file_contents(job_id, "stdout.txt")
         self.assertEqual(stdout.strip(), message)
 
+    def test_get_status(self):
+        """
+        Submit a job and check that its status can be retrieved
+        """
+        a = self.ARC_INTERFACE
+        job_id = a.submit_job("/bin/ls")
+        try:
+            status = a.get_job_status(job_id)
+        except Exception as ex:
+            self.fail(ex)
+
     def test_output_files(self):
         """
         Submit a job that writes and output file, and check that is it downloaded successfully
