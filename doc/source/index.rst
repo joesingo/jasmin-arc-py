@@ -82,8 +82,8 @@ To get started, create a JSON config file that points to your private key and ce
 .. code-block:: json
 
    {
-     "PEM_FILE": "/path/to/private/key.pem",
-     "CLIENT_CERT_FILE": "/path/to/cert.pem",
+     "CLIENT_KEY": "/path/to/private/key.pem",
+     "CLIENT_CERT": "/path/to/cert.pem",
    }
 
 All actions are performed through the `ArcInterface` class. Some examples:
@@ -107,7 +107,7 @@ server URL, use the following JSON:
 .. code-block:: json
 
    {
-     "PEM_FILE": "/my/private/key",
+     "CLIENT_KEY": "/my/private/key",
      "ARC_SERVER": "my-arc-server.ac.uk"
    }
 

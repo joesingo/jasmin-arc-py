@@ -196,8 +196,8 @@ class ArcInterface(object):
         try:
             output = subprocess.check_output([
                 self.config.ARCPROXY_PATH,
-                "-C", self.config.CLIENT_CERT_FILE,
-                "-K", self.config.PEM_FILE,
+                "-C", self.config.CLIENT_CERT,
+                "-K", self.config.CLIENT_KEY,
                 "-P", self.config.PROXY_FILE,
                 "-c", "validityPeriod={}".format(self.config.PROXY_VALIDITY_PERIOD)
             ])

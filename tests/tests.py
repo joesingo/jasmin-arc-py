@@ -35,7 +35,7 @@ class JasminArcTests(ArcTestCase):
         filename = None
         with tempfile.NamedTemporaryFile(delete=False, dir=BASE_TEMP_DIR) as config_file:
             filename = config_file.name
-            json.dump({"PEM_FILE": "/tmp/nonexistentfile"}, config_file)
+            json.dump({"CLIENT_KEY": "/tmp/nonexistentfile"}, config_file)
 
         a = ArcInterface(filename)
         with self.assertRaises(ProxyGenerationError):

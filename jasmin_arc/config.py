@@ -11,10 +11,10 @@ class ConnectionConfig(object):
     """
 
     #: Path to the private key file associated with your grid certificate
-    PEM_FILE = "~/.arc/userkey-nopass.pem"
+    CLIENT_KEY = "~/.arc/userkey-nopass.pem"
 
     #: Path to grid certificate file
-    CLIENT_CERT_FILE = "~/.arc/usercert.pem"
+    CLIENT_CERT = "~/.arc/usercert.pem"
 
     #: Path to directory containing trusted CA certificates
     CERTS_DIR = "/etc/grid-security/certificates"
