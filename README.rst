@@ -84,6 +84,7 @@ to use use in the tests:
    export JASMIN_ARC_CONFIG=/path/to/config
 
 Then run:
+
 .. code-block:: bash
 
    python tests/tests.py
