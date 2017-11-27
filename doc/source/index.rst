@@ -146,15 +146,16 @@ string of numbers at the end is the last component of the job ID.
 Any input files passed to `ArcInterface.submit_job` are copied into this directory, and can be
 accessed from your jobs.
 
-Any files written to this directory can be retrieved with `ArcInterface.save_job_outputs`. The
-directory structure of the session directory is preserved, so your jobs can create sub-directories
-and files within them if required.
+Use the `OUTPUT_FILE` config option to specify which file/directory to download with
+`ArcInterface.save_job_outputs`. This will download the specified file/directory, and also the
+contents of ``stdout`` and ``stderr`` to ``stdout.txt`` and ``stderr.txt`` respectively.
 
-The contents of ``stdout`` and ``stderr`` are written to ``stdout.txt`` and ``stderr.txt``
-respectively.
-
-All outputs are downloaded to a temporary directory (in ``/tmp`` on UNIX platforms), and the path
+Outputs are saved to a temporary directory (in ``/tmp`` on UNIX platforms), and the path
 to this directory is returned. You may then move files to a more permanent location as required.
+
+.. note::
+
+   Any other files written to the session directory will be deleted when the job finishes.
 
 Examples
 --------
@@ -163,9 +164,13 @@ Setting log output destination and logging level:
 
 .. literalinclude:: examples/logging.py
 
-Uploading and processing input files
+Uploading and processing input files:
 
 .. literalinclude:: examples/input_files.py
+
+Downloading output files
+
+.. literalinclude:: examples/download_outputs.py
 
 Indices and tables
 ==================

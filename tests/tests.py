@@ -124,6 +124,7 @@ class JobSubmissionTests(ArcTestCase):
         a = self.ARC_INTERFACE
         message = "my message here"
         outfile = "outfile.txt"
+        a.config.OUTPUT_FILE = outfile
         job_id = a.submit_job("/bin/bash", ["-c", "echo '{}' > {}".format(message, outfile)])
         self.wait(self.BASIC_SUBMISSION_TIMEOUT)
         outfile_contents = self.get_output_file_contents(job_id, outfile)

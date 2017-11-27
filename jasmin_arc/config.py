@@ -41,6 +41,9 @@ class ConnectionConfig(object):
     #: information about submitted jobs
     JOBS_INFO_FILE = "~/.arc/jobs.dat"
 
+    #: The name of the file/directory to download when retrieving job outputs.
+    OUTPUT_FILE = "output"
+
     def __init__(self, config_dict, logger=None):
         """
         :param config_dict: A dictionary containing options to override. Each key should be one of

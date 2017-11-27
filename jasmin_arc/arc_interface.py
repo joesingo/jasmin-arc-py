@@ -106,7 +106,8 @@ class ArcInterface(object):
             "name": "ARC job",  # TODO: Use sensible name or omit
             "executable": executable,
             "arguments": args,
-            "input_files_map": input_files_map
+            "input_files_map": input_files_map,
+            "output_file": self.config.OUTPUT_FILE
         })
         job_descriptions = self.get_job_descriptions(jsdl)
 
@@ -165,8 +166,9 @@ class ArcInterface(object):
 
     def save_job_outputs(self, job_id):
         """
-        Retrieve output files from a job and save them to a temp directory. ``stdout`` and
-        ``stderr`` outputs are saved as ``stdout.txt`` and ``stderr.txt`` respectively.
+        Retrieve output files from a job and save them to a temp directory. The file/directory
+        specified in `OUTPUT_FILE` will be downloaded, and ``stdout`` and ``stderr`` outputs are
+        saved as ``stdout.txt`` and ``stderr.txt`` respectively.
 
         :param job_id:            ID of the job as returned by `submit_job`
         :raises JobNotFoundError: if no job with the given ID could be found

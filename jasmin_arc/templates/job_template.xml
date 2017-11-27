@@ -24,6 +24,10 @@
         </Source>
       </DataStaging>
     {% endfor %}
+    <DataStaging>
+      <FileName>{{ output_file }}</FileName>
+      <DeleteOnTermination>false</DeleteOnTermination>
+    </DataStaging>
   </JobDescription>
 </JobDefinition>
 
