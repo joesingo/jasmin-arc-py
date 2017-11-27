@@ -4,26 +4,10 @@ jasmin\_arc package
 Submodules
 ----------
 
-jasmin\_arc\.arc\_iface module
-------------------------------
-
-.. automodule:: jasmin_arc.arc_iface
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 jasmin\_arc\.arc\_interface module
 ----------------------------------
 
 .. automodule:: jasmin_arc.arc_interface
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-jasmin\_arc\.arclib module
---------------------------
-
-.. automodule:: jasmin_arc.arclib
     :members:
     :undoc-members:
     :show-inheritance:
