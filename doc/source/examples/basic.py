@@ -7,7 +7,7 @@ from jasmin_arc import ArcInterface, JobStatuses
 
 arc_iface = ArcInterface("/path/to/config.json")
 job_id = arc_iface.submit_job("/bin/bash",
-                              ["-c", "echo 'This job is running on `/bin/hostname`'"])
+                              args=["-c", "echo 'This job is running on `/bin/hostname`'"])
 
 while True:
     status = arc_iface.get_job_status(job_id)
